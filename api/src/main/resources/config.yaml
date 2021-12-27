@@ -1,0 +1,26 @@
+kumuluzee:
+  name: rezervacije-service
+  env:
+    name: dev
+  version: 1.0.0
+  server:
+    base-url: http://localhost:8082
+    http:
+      port: 8082
+  datasources:
+    - jndi-name: jdbc/RezervacijeMetadataDS
+      connection-url: jdbc:postgresql://localhost:5432/postgres
+      username: postgres
+      password: postgres
+  health:
+    checks:
+      data-source-health-check:
+        type: liveness
+        jndi-name: jdbc/RezervacijeMetadataDS
+    metrics:
+      web-instrumentation:
+        - name: rezervacije-endpoint
+          url-pattern: /v1/rezervacije/*
+rest-properties:
+  maintenance-mode: false
+  broken: false

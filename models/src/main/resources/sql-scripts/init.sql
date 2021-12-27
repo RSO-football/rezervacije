@@ -1,0 +1,1 @@
+INSERT INTO rezervacije_metadata (startTime, eventType) VALUES ('2021-12-21T14:22:01.138238', 'trening');
