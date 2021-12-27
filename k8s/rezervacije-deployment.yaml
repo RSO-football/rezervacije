@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rezervacije-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rezervacije
+  template:
+    metadata:
+      labels:
+        app: rezervacije
+    spec:
+      containers:
+        - image: ts4894/rezervacije:2021-12-18-01-40-26
+          name: rezervacije
+          env:
+            - name: KUMULUZEE_DATASOURCES0_CONNECTIONURL
+              value: jdbc:postgresql://rezervacije-db.postgres.database.azure.com:5432/postgres?user=postgresAdmin&sslmode=require
+            - name: KUMULUZEE_DATASOURCES0_USERNAME
+              value: postgresAdmin
+            - name: KUMULUZEE_DATASOURCES0_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: pg-pas-rezervacije
+                  key: password
+          ports:
+            - containerPort: 8082
+              name: server
+              protocol: TCP
+
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: rezervacije
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 8082
+      protocol: TCP
+      targetPort: server
+  selector:
+    app: rezervacije
