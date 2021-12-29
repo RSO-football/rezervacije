@@ -13,18 +13,13 @@ spec:
         app: rezervacije
     spec:
       containers:
-        - image: ts4894/rezervacije:2021-12-18-01-40-26
+        - image: ts4894/rezervacije:2021-12-27-23-14-14
           name: rezervacije
           env:
             - name: KUMULUZEE_DATASOURCES0_CONNECTIONURL
-              value: jdbc:postgresql://rezervacije-db.postgres.database.azure.com:5432/postgres?user=postgresAdmin&sslmode=require
+              value: jdbc:postgresql://rezervacije-db.postgres.database.azure.com:5432/postgres?user=postgresAdmin&password=RezervacijeDBPass123&sslmode=require
             - name: KUMULUZEE_DATASOURCES0_USERNAME
               value: postgresAdmin
-            - name: KUMULUZEE_DATASOURCES0_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: pg-pas-rezervacije
-                  key: password
           ports:
             - containerPort: 8082
               name: server

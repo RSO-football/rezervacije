@@ -28,9 +28,20 @@ public class RezervacijeMetadataResource {
     protected UriInfo uriInfo;
 
     @GET
+    @Path("/trener/{trenerMetadataId}")
+    public Response getRezervacijeTrenerjaMetadata(@PathParam("trenerMetadataId") Integer trenerMetadataId) {
+        List<RezervacijeMetadata> rezervacijeMetadata = rezervacijeMetadataBean.getRezervacijeTrenerjaMetadata(trenerMetadataId);
+
+        return Response.status(Response.Status.OK).entity(rezervacijeMetadata.size()).build();
+    }
+
+    @GET
     public Response getRezervacijeMetadata() {
 
         List<RezervacijeMetadata> rezervacijeMetadata = rezervacijeMetadataBean.getRezervacijeMetadataFilter(uriInfo);
+        System.out.println(uriInfo.getBaseUri());
+        System.out.println(uriInfo.getAbsolutePath());
+        System.out.println(uriInfo.getPath());
 
         return Response.status(Response.Status.OK).entity(rezervacijeMetadata).build();
     }

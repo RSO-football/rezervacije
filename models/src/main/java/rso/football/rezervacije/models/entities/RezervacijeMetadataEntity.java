@@ -9,7 +9,9 @@ import java.time.LocalDateTime;
 @NamedQueries(value =
         {
                 @NamedQuery(name = "RezervacijeMetadataEntity.getAll",
-                        query = "SELECT rezervacija FROM RezervacijeMetadataEntity rezervacija")
+                        query = "SELECT rezervacija FROM RezervacijeMetadataEntity rezervacija"),
+                @NamedQuery(name = "RezervacijeMetadataEntity.findRezervacijaWithTrenerId",
+                        query = "SELECT rezervacija FROM RezervacijeMetadataEntity rezervacija WHERE rezervacija.trenerId = ?1")
         })
 public class RezervacijeMetadataEntity {
 
@@ -17,8 +19,8 @@ public class RezervacijeMetadataEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-//    @Column(name = "igrisce")
-//    private Integer igrisce;
+    @Column(name = "igrisceId")
+    private Integer igrisceId;
 
     @Column(name = "startTime")
     private String startTime;
@@ -26,8 +28,8 @@ public class RezervacijeMetadataEntity {
     @Column(name = "eventType")
     private String eventType;
 
-//    @Column(name = "trener")
-//    private Integer trener;
+    @Column(name = "trenerId")
+    private Integer trenerId;
 
     // dodaj List igralcev, ki so v določeni aktivnosti
 
@@ -55,19 +57,19 @@ public class RezervacijeMetadataEntity {
         this.eventType = eventType;
     }
 
-//    public Integer getTrener() {
-//        return trener;
-//    }
-//
-//    public void setTrener(Integer trener) {
-//        this.trener = trener;
-//    }
+    public Integer getIgrisceId() {
+        return igrisceId;
+    }
 
-//    public Integer getIgrisce() {
-//        return igrisce;
-//    }
-//
-//    public void setIgrisce(Integer igrisce) {
-//        this.igrisce = igrisce;
-//    }
+    public void setIgrisceId(Integer igrisceId) {
+        this.igrisceId = igrisceId;
+    }
+
+    public Integer getTrenerId() {
+        return trenerId;
+    }
+
+    public void setTrenerId(Integer trenerId) {
+        this.trenerId = trenerId;
+    }
 }

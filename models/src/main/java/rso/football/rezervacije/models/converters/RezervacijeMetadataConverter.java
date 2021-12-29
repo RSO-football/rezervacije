@@ -8,20 +8,20 @@ public class RezervacijeMetadataConverter {
     public static RezervacijeMetadata toDto(RezervacijeMetadataEntity entity){
         RezervacijeMetadata dto = new RezervacijeMetadata();
         dto.setRezervacijaId(entity.getId());
-//        dto.setIgrisce(entity.getIgrisce());
+        dto.setIgrisceId(entity.getIgrisceId());
         dto.setEventType(entity.getEventType());
         dto.setStartTime(entity.getStartTime());
-//        dto.setTrener(entity.getTrener());
+        dto.setTrenerId(entity.getTrenerId());
 
         return dto;
     }
 
     public static RezervacijeMetadataEntity toEntity(RezervacijeMetadata dto){
         RezervacijeMetadataEntity entity = new RezervacijeMetadataEntity();
-//        entity.setIgrisce(dto.getIgrisce());
+        entity.setIgrisceId(dto.getIgrisceId());
         entity.setEventType(dto.getEventType());
         entity.setStartTime(dto.getStartTime());
-//        entity.setTrener(dto.getTrener());
+        entity.setTrenerId(dto.getTrenerId());
 
         return entity;
     }

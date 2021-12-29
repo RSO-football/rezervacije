@@ -8,8 +8,8 @@ public class RezervacijeMetadata {
 //    private LocalDateTime startTime;
     private String startTime;
     private String eventType;
-//    private Integer igrisce;
-//    private Integer trener;
+    private Integer igrisceId;
+    private Integer trenerId;
     //dodaj List<Igralec> igralci ali pa List<Integer> igralci
 
 
@@ -37,26 +37,19 @@ public class RezervacijeMetadata {
         this.eventType = eventType;
     }
 
-//    public Integer getIgrisce() {
-//        return igrisce;
-//    }
-//
-//    public void setIgrisce(Integer igrisce) {
-//        this.igrisce = igrisce;
-//    }
-//
-//    public LocalDateTime getStartTime() {
-//        return startTime;
-//    }
-//
-//    public void setStartTime(LocalDateTime startTime) {
-//        this.startTime = startTime;
-//    }
-//    public Integer getTrener() {
-//        return trener;
-//    }
-//
-//    public void setTrener(Integer trener) {
-//        this.trener = trener;
-//    }
+    public Integer getIgrisceId() {
+        return igrisceId;
+    }
+
+    public void setIgrisceId(Integer igrisceId) {
+        this.igrisceId = igrisceId;
+    }
+
+    public Integer getTrenerId() {
+        return trenerId;
+    }
+
+    public void setTrenerId(Integer trenerId) {
+        this.trenerId = trenerId;
+    }
 }

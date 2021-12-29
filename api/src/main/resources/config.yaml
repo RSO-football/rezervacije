@@ -9,8 +9,9 @@ kumuluzee:
       port: 8082
   datasources:
     - jndi-name: jdbc/RezervacijeMetadataDS
-      connection-url: jdbc:postgresql://rezervacije-db.postgres.database.azure.com:5432/postgres?user=postgresAdmin&password=&sslmode=require
-      username: postgresAdmin
+      connection-url: jdbc:postgresql://localhost:5432/postgres
+      username: postgres
+      password: postgres
   health:
     checks:
       data-source-health-check:

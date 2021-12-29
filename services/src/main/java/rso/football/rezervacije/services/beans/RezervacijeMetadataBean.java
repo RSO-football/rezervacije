@@ -12,6 +12,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.UriInfo;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -35,13 +36,38 @@ public class RezervacijeMetadataBean {
 
     }
 
+    public List<RezervacijeMetadata> getRezervacijeTrenerjaMetadata(Integer trenerId) {
+        TypedQuery<RezervacijeMetadataEntity> query = em.createNamedQuery(
+                "RezervacijeMetadataEntity.findRezervacijaWithTrenerId", RezervacijeMetadataEntity.class);
+        query.setParameter(1, trenerId);
+
+        List<RezervacijeMetadataEntity> resultList = query.getResultList();
+
+        return resultList.stream().map(RezervacijeMetadataConverter::toDto).collect(Collectors.toList());
+    }
+
     public List<RezervacijeMetadata> getRezervacijeMetadataFilter(UriInfo uriInfo) {
 
         QueryParameters queryParameters = QueryParameters.query(uriInfo.getRequestUri().getQuery()).defaultOffset(0)
                 .build();
 
-        return JPAUtils.queryEntities(em, RezervacijeMetadataEntity.class, queryParameters).stream()
+        String trenerId = uriInfo.getQueryParameters().getFirst("trenerId");
+        System.out.println(trenerId);
+
+        List<RezervacijeMetadata> results =  JPAUtils.queryEntities(em, RezervacijeMetadataEntity.class, queryParameters).stream()
                 .map(RezervacijeMetadataConverter::toDto).collect(Collectors.toList());
+
+        if (trenerId != null){
+            List<RezervacijeMetadata> newResults = new ArrayList<>();
+            for (RezervacijeMetadata rezervacija : results){
+                if (rezervacija.getTrenerId() == Integer.parseInt(trenerId)){
+                    newResults.add(rezervacija);
+                }
+            }
+            return newResults;
+        }
+
+        return results;
     }
 
     public RezervacijeMetadata getRezervacijeMetadata(Integer id) {
