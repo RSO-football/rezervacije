@@ -44,7 +44,7 @@ public class RezervacijeMetadataBean {
         log.info("Inicializacija zrna: " + RezervacijeMetadataBean.class.getSimpleName() + " id: " + uniqueID);
 
         httpClient = ClientBuilder.newClient();
-        baseUrlIgrisca = ConfigurationUtil.getInstance().get("igrisca-storitev-url").orElse("http://localhost:8080/");
+        baseUrlIgrisca = ConfigurationUtil.getInstance().get("igrisca-storitev.url").orElse("http://localhost:8080/");
     }
 
     public List<RezervacijeMetadata> getRezervacijeMetadata() {
