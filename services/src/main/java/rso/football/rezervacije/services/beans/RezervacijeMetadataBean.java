@@ -52,7 +52,8 @@ public class RezervacijeMetadataBean {
                 .build();
 
         String trenerId = uriInfo.getQueryParameters().getFirst("trenerId");
-        System.out.println(trenerId);
+        String igrisceId = uriInfo.getQueryParameters().getFirst("igrisceId");
+        System.out.println(trenerId + " " + igrisceId);
 
         List<RezervacijeMetadata> results =  JPAUtils.queryEntities(em, RezervacijeMetadataEntity.class, queryParameters).stream()
                 .map(RezervacijeMetadataConverter::toDto).collect(Collectors.toList());
@@ -61,6 +62,16 @@ public class RezervacijeMetadataBean {
             List<RezervacijeMetadata> newResults = new ArrayList<>();
             for (RezervacijeMetadata rezervacija : results){
                 if (rezervacija.getTrenerId() == Integer.parseInt(trenerId)){
+                    newResults.add(rezervacija);
+                }
+            }
+            return newResults;
+        }
+
+        if (igrisceId != null){
+            List<RezervacijeMetadata> newResults = new ArrayList<>();
+            for (RezervacijeMetadata rezervacija : results){
+                if (rezervacija.getIgrisceId() == Integer.parseInt(igrisceId)){
                     newResults.add(rezervacija);
                 }
             }
