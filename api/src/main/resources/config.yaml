@@ -35,6 +35,6 @@ app-properties:
     secret-key:
 
 igrisca-storitev:
-  url: "http://localhost:8080/"
+  url: "http://20.85.139.182:8080/"
   enabled: false
   watch: true
