@@ -1,19 +1,29 @@
 package rso.football.rezervacije.services.beans;
 
+import com.kumuluz.ee.configuration.utils.ConfigurationUtil;
 import com.kumuluz.ee.rest.beans.QueryParameters;
 import com.kumuluz.ee.rest.utils.JPAUtils;
+import rso.football.rezervacije.lib.IgriscaMetadata;
 import rso.football.rezervacije.lib.RezervacijeMetadata;
 import rso.football.rezervacije.models.converters.RezervacijeMetadataConverter;
 import rso.football.rezervacije.models.entities.RezervacijeMetadataEntity;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.NotFoundException;
+import javax.ws.rs.ProcessingException;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.UriInfo;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -24,6 +34,18 @@ public class RezervacijeMetadataBean {
 
     @Inject
     private EntityManager em;
+
+    private Client httpClient;
+    private String baseUrlIgrisca;
+
+    @PostConstruct
+    private void init() {
+        String uniqueID = UUID.randomUUID().toString();
+        log.info("Inicializacija zrna: " + RezervacijeMetadataBean.class.getSimpleName() + " id: " + uniqueID);
+
+        httpClient = ClientBuilder.newClient();
+        baseUrlIgrisca = ConfigurationUtil.getInstance().get("igrisca-storitev-url").orElse("http://localhost:8080/");
+    }
 
     public List<RezervacijeMetadata> getRezervacijeMetadata() {
 
@@ -79,6 +101,50 @@ public class RezervacijeMetadataBean {
         }
 
         return results;
+    }
+
+    public String getVremeMetadata(Integer id) {
+        RezervacijeMetadataEntity rezervacijeMetadataEntity = em.find(RezervacijeMetadataEntity.class, id);
+
+        if (rezervacijeMetadataEntity == null) {
+            throw new NotFoundException();
+        }
+
+        RezervacijeMetadata rezervacijeMetadata = RezervacijeMetadataConverter.toDto(rezervacijeMetadataEntity);
+
+        IgriscaMetadata igrisce = getIgrisceMetadata(rezervacijeMetadata.getIgrisceId());
+
+        if (igrisce != null){
+            String apiKey = "b08f0af497bd1961a8dcc3ad79a88357";
+            String url = "https://api.openweathermap.org/data/2.5/onecall?lat="+igrisce.getLatitude()+"&lon="+igrisce.getLongitude()+"&appid="+apiKey;
+            log.info("url api vreme je " + url);
+            try{
+                return httpClient
+                        .target(url)
+                        .request()
+                        .get(String.class);
+            } catch (WebApplicationException | ProcessingException e){
+                throw new InternalServerErrorException(e);
+            }
+        }
+
+        return null;
+    }
+
+    private IgriscaMetadata getIgrisceMetadata(Integer id) {
+        String url = baseUrlIgrisca + "v1/igrisca/" + id;
+
+        log.info("url je " + url);
+
+        try{
+            return httpClient
+                    .target(url)
+                    .request().get(new GenericType<IgriscaMetadata>() {
+                    });
+        } catch (WebApplicationException | ProcessingException e){
+            log.info("Napaka pri pridobivanju igrisca!");
+            throw new InternalServerErrorException(e);
+        }
     }
 
     public RezervacijeMetadata getRezervacijeMetadata(Integer id) {

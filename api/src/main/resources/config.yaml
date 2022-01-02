@@ -33,3 +33,8 @@ app-properties:
   amazon-rekognition:
     access-key:
     secret-key:
+
+igrisca-storitev:
+  url: "http://localhost:8080"
+  enabled: false
+  watch: true

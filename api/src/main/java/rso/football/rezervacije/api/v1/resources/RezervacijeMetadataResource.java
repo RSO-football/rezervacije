@@ -36,6 +36,14 @@ public class RezervacijeMetadataResource {
     }
 
     @GET
+    @Path("/{rezervacijeMetadataId}/vreme")
+    public Response getRezervacijaVreme(@PathParam("rezervacijeMetadataId") Integer rezervacijeMetadataId) {
+        String vreme = rezervacijeMetadataBean.getVremeMetadata(rezervacijeMetadataId);
+
+        return Response.status(Response.Status.OK).entity(vreme).build();
+    }
+
+    @GET
     public Response getRezervacijeMetadata() {
 
         List<RezervacijeMetadata> rezervacijeMetadata = rezervacijeMetadataBean.getRezervacijeMetadataFilter(uriInfo);
