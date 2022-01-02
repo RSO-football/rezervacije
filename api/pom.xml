@@ -28,6 +28,11 @@
         </dependency>
 
         <dependency>
+            <groupId>com.kumuluz.ee.cors</groupId>
+            <artifactId>kumuluzee-cors</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>rso.football</groupId>
             <artifactId>rezervacije-services</artifactId>
         </dependency>

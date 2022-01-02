@@ -1,5 +1,6 @@
 package rso.football.rezervacije.api.v1.resources;
 
+import com.kumuluz.ee.cors.annotations.CrossOrigin;
 import rso.football.rezervacije.lib.RezervacijeMetadata;
 import rso.football.rezervacije.services.beans.RezervacijeMetadataBean;
 
@@ -17,6 +18,7 @@ import java.util.logging.Logger;
 @Path("/rezervacije")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
+@CrossOrigin(supportedMethods = "GET, POST, DELETE, PUT, HEAD, OPTIONS")
 public class RezervacijeMetadataResource {
 
     private Logger log = Logger.getLogger(RezervacijeMetadataResource.class.getName());
