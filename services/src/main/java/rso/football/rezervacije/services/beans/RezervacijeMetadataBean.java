@@ -22,6 +22,7 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.UriInfo;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.logging.Logger;
@@ -37,6 +38,7 @@ public class RezervacijeMetadataBean {
 
     private Client httpClient;
     private String baseUrlIgrisca;
+    private String baseUrlUporabniki;
 
     @PostConstruct
     private void init() {
@@ -45,6 +47,7 @@ public class RezervacijeMetadataBean {
 
         httpClient = ClientBuilder.newClient();
         baseUrlIgrisca = ConfigurationUtil.getInstance().get("igrisca-storitev.url").orElse("http://localhost:8080/");
+        baseUrlUporabniki = ConfigurationUtil.getInstance().get("uporabniki-storitev.url").orElse("http://localhost:8083/");
     }
 
     public List<RezervacijeMetadata> getRezervacijeMetadata() {
@@ -160,9 +163,31 @@ public class RezervacijeMetadataBean {
         return rezervacijeMetadata;
     }
 
+    public String getTrenerjiId(){
+        String url = baseUrlUporabniki + "v1/uporabniki/trenerjiId";
+        log.info("url je " + url);
+
+        try {
+            return httpClient
+                    .target(url)
+                    .request().get(String.class);
+        } catch (WebApplicationException | ProcessingException e){
+            throw new InternalServerErrorException(e);
+        }
+    }
+
     public RezervacijeMetadata createRezervacijeMetadata(RezervacijeMetadata rezervacijeMetadata) {
 
         RezervacijeMetadataEntity rezervacijeMetadataEntity = RezervacijeMetadataConverter.toEntity(rezervacijeMetadata);
+
+        String trenerjiString = getTrenerjiId();
+        List<Integer> trenerjiId = Arrays.stream(trenerjiString.split(",")).map(Integer::parseInt).collect(Collectors.toList());
+
+        System.out.println(trenerjiString);
+
+        if (!trenerjiId.contains(rezervacijeMetadataEntity.getTrenerId())){
+            return null;
+        }
 
         try {
             beginTx();

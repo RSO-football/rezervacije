@@ -77,9 +77,12 @@ public class RezervacijeMetadataResource {
         }
         else {
             rezervacijeMetadata = rezervacijeMetadataBean.createRezervacijeMetadata(rezervacijeMetadata);
+            if (rezervacijeMetadata == null){
+                return Response.status(Response.Status.BAD_REQUEST).build();
+            }
         }
 
-        return Response.status(Response.Status.CONFLICT).entity(rezervacijeMetadata).build();
+        return Response.status(Response.Status.CREATED).entity(rezervacijeMetadata).build();
 
     }
 
@@ -94,7 +97,7 @@ public class RezervacijeMetadataResource {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
-        return Response.status(Response.Status.NOT_MODIFIED).build();
+        return Response.status(Response.Status.NO_CONTENT).build();
 
     }
 

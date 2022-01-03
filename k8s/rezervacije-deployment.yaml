@@ -13,7 +13,7 @@ spec:
         app: rezervacije
     spec:
       containers:
-        - image: ts4894/rezervacije:2022-01-02-19-30-04
+        - image: ts4894/rezervacije:2022-01-02-22-02-05
           name: rezervacije
           env:
             - name: KUMULUZEE_DATASOURCES0_CONNECTIONURL
