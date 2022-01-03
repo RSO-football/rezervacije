@@ -178,7 +178,7 @@ public class RezervacijeMetadataBean {
 
 
     private String getIgriscaID() {
-        String url = baseUrlIgrisca + "v1/uporabniki/igriscaId";
+        String url = baseUrlIgrisca + "v1/igrisca/igriscaId";
         log.info("url je " + url);
 
         try {
