@@ -176,16 +176,34 @@ public class RezervacijeMetadataBean {
         }
     }
 
+
+    private String getIgriscaID() {
+        String url = baseUrlIgrisca + "v1/uporabniki/igriscaId";
+        log.info("url je " + url);
+
+        try {
+            return httpClient
+                    .target(url)
+                    .request().get(String.class);
+        } catch (WebApplicationException | ProcessingException e){
+            throw new InternalServerErrorException(e);
+        }
+    }
+
     public RezervacijeMetadata createRezervacijeMetadata(RezervacijeMetadata rezervacijeMetadata) {
 
         RezervacijeMetadataEntity rezervacijeMetadataEntity = RezervacijeMetadataConverter.toEntity(rezervacijeMetadata);
 
         String trenerjiString = getTrenerjiId();
         List<Integer> trenerjiId = Arrays.stream(trenerjiString.split(",")).map(Integer::parseInt).collect(Collectors.toList());
-
         System.out.println(trenerjiString);
 
-        if (!trenerjiId.contains(rezervacijeMetadataEntity.getTrenerId())){
+        String igriscaString = getIgriscaID();
+        List<Integer> igriscaID = Arrays.stream(igriscaString.split(",")).map(Integer::parseInt).collect(Collectors.toList());
+        System.out.println(igriscaString);
+
+
+        if (!trenerjiId.contains(rezervacijeMetadataEntity.getTrenerId()) || !igriscaID.contains(rezervacijeMetadataEntity.getIgrisceId())){
             return null;
         }
 
